@@ -5,6 +5,7 @@ Created on 25 Nov 2017
 '''
 import unittest
 import rulemsx
+from datapointsource import DataPointSource
 
 
 class TestRuleMSX(unittest.TestCase):
@@ -108,3 +109,32 @@ class TestRuleMSX(unittest.TestCase):
         dataPointName = ""
         ds = rmsx.createDataSet(dataSetName)
         self.assertRaises(ValueError, ds.addDataPoint, dataPointName)
+        
+    
+    def test_AddDataPointSourceInvalidType(self):
+
+        rmsx = rulemsx.RuleMSX()
+        dataSetName = "NewDataSet"
+        dataPointName = "NewDataPoint"
+        ds = rmsx.createDataSet(dataSetName)
+        self.assertRaises(TypeError, ds.addDataPoint, dataPointName, 1) # pass int instead of datapointsource
+        
+    class GenericStringDataPointSource(DataPointSource):
+            
+        def __init__(self):
+            pass
+
+    def test_AddDataPointSourceValid(self):
+
+        rmsx = rulemsx.RuleMSX()
+        dataSetName = "NewDataSet"
+        dataPointName = "NewDataPoint"
+        ds = rmsx.createDataSet(dataSetName)
+        dps = self.GenericStringDataPointSource()
+        ds.addDataPoint(dataPointName, dps)
+        dso = rmsx.dataSets[dataSetName]
+        dpo = dso.dataPoints[dataPointName]
+        dpsOut = dpo.dataPointSource
+        self.assertEqual(dps, dpsOut)
+
+        

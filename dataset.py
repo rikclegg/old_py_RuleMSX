@@ -18,7 +18,10 @@ class DataSet:
         if(name is None or name == ""):
             raise ValueError("DataPoint name cannot be none or empty")
         
-        dp = DataPoint(name)
-        dp.setDataPointSource(dataPointSource)
+        dp = DataPoint(self, name)
+        
+        if not dataPointSource == None:
+            dp.setDataPointSource(dataPointSource)
+        
         self.dataPoints[name] = dp
         return dp
