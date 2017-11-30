@@ -19,7 +19,7 @@ class Rule:
         if ruleCondition == None:
             raise ValueError("RuleCondition cannot be none")
         
-        self.conditions.append(ruleCondition)
+        self.ruleConditions.append(ruleCondition)
         
     
     def evaluate(self):

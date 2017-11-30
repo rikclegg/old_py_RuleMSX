@@ -15,6 +15,7 @@ class ExecutionAgent:
         def __init__(self,execAgent):
             self.running = True
             self.openSetQueue = []
+            self.openSet = []
             self.execAgent= execAgent
             self.workingSet = []
             self.lock = threading.Lock()
@@ -25,7 +26,7 @@ class ExecutionAgent:
             while(self.running):
 
                 with self.lock:
-                    while len(self.execAgent.dataSetQueue)>0:
+                    while self.execAgent.dataSetQueue.qsize() >0:
                         ds = self.execAgent.dataSetQueue.get()
                         self.ingestDataSet(ds)
             
@@ -48,7 +49,7 @@ class ExecutionAgent:
                 
         def ingestDataSet(self,dataSet):
                 
-            for r in self.execAgent.ruleSet:
+            for k,r in self.execAgent.ruleSet.rules.items():
                 wr = WorkingRule(r,dataSet)
                 self.workingSet.append(wr)
                 self.openSet.append(wr)

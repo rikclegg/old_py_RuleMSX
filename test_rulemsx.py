@@ -6,7 +6,9 @@ Created on 25 Nov 2017
 import unittest
 import rulemsx
 from datapointsource import DataPointSource
-
+from ruleevaluator import RuleEvaluator
+from rulecondition import RuleCondition
+import time
 
 class TestRuleMSX(unittest.TestCase):
 
@@ -121,8 +123,8 @@ class TestRuleMSX(unittest.TestCase):
         
     class GenericStringDataPointSource(DataPointSource):
             
-        def __init__(self):
-            pass
+        def __init__(self, val=None):
+            self.strval = val
 
     def test_AddDataPointSourceValid(self):
 
@@ -137,4 +139,43 @@ class TestRuleMSX(unittest.TestCase):
         dpsOut = dpo.dataPointSource
         self.assertEqual(dps, dpsOut)
 
+    class GenericRuleConditionEvaluator(RuleEvaluator):
         
+        def __init__(self, target, dataPointName):
+            self.target = target
+            self.dataPointName = dataPointName
+            
+        def evaluate(self,dataSet):
+            val = dataSet.dataPoints[self.dataPointName].getValue()
+            return val==self.target
+        
+    def test_integration_TestRuleSet01(self):
+        
+        raised = False
+        
+        try:
+            rmsx = rulemsx.RuleMSX()
+            
+            ds1 = rmsx.createDataSet("DataSet1")
+            ds1.addDataPoint("DataPoint1",self.GenericStringDataPointSource("TestValue"))
+            ds1.addDataPoint("DataPoint2",self.GenericStringDataPointSource("AnotherValue"))
+            
+            rs1 = rmsx.createRuleSet("RuleSet1")
+            r1 = rs1.addRule("TestRule1")
+            
+            c1 = RuleCondition("CheckIfTarget1MatchesDataPoint", self.GenericRuleConditionEvaluator("TestValue","DataPoint1"))
+            r1.addRuleCondition(c1)
+            
+            c2 = RuleCondition("CheckIfTarget2MatchesDataPoint", self.GenericRuleConditionEvaluator("AnotherValue","DataPoint2"))
+            r1.addRuleCondition(c2)
+ 
+            rs1.execute(ds1)
+ 
+            time.sleep(5)
+            
+            rs1.stop()
+            
+        except:
+            raised = True
+
+        self.assertFalse(raised)

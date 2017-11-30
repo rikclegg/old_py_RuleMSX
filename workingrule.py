@@ -17,11 +17,13 @@ class WorkingRule:
     
     def dereference(self):
         
-        for action in self.rule.actions:
-            self.executors.append(action.actionExecutor)
+        if not self.rule.actions == []:         
+            for action in self.rule.actions:
+                self.executors.append(action.actionExecutor)
             
-        for condition in self.rule.ruleConditions:
-            self.evaluators.append(condition.evaluator)
+        if not self.rule.ruleConditions == []:         
+            for condition in self.rule.ruleConditions:
+                self.evaluators.append(condition.evaluator)
             
             
     
