@@ -23,8 +23,12 @@ class ExecutionAgent:
             
         def run(self):
             
+            iterationCount = 0
             while(self.running):
-
+                
+                print("WorkingSet iteration %d" % (iterationCount))
+                iterationCount=iterationCount+1
+                
                 with self.lock:
                     while self.execAgent.dataSetQueue.qsize() >0:
                         ds = self.execAgent.dataSetQueue.get()
@@ -40,19 +44,22 @@ class ExecutionAgent:
                     for wr in self.openSet:
                         res = True
                         for e in wr.evaluators:
-                            if not e.evaluate(wr.dataSet): res = False
-                        
+                            if not e.evaluate(wr.dataSet): 
+                                res = False
+                                break
+                            
                         if res:
-                            for x in e.executors:
+                            for x in wr.executors:
                                 x.execute(wr.dataSet)
                         
                 
         def ingestDataSet(self,dataSet):
                 
-            for k,r in self.execAgent.ruleSet.rules.items():
+            #for k,r in self.execAgent.ruleSet.rules.items():
+            for r in self.execAgent.ruleSet.rules.values():
                 wr = WorkingRule(r,dataSet)
                 self.workingSet.append(wr)
-                self.openSet.append(wr)
+                self.openSetQueue.append(wr)
             
     
     def __init__(self,ruleSet, dataSet=None):

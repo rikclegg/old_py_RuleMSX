@@ -37,12 +37,12 @@ class RuleMSX:
         return rs
 
     
-    def createAction(self,name):
+    def createAction(self,name, executor):
         
         if(name is None or name == ""):
             raise ValueError("Action name cannot be none or empty")
         
-        a = Action(name)
+        a = Action(name,executor)
         self.actions[name] = a
         return a
     

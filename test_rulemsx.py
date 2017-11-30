@@ -8,6 +8,8 @@ import rulemsx
 from datapointsource import DataPointSource
 from ruleevaluator import RuleEvaluator
 from rulecondition import RuleCondition
+from action import Action
+
 import time
 
 class TestRuleMSX(unittest.TestCase):
@@ -125,6 +127,10 @@ class TestRuleMSX(unittest.TestCase):
             
         def __init__(self, val=None):
             self.strval = val
+            
+        def getValue(self):
+            print("DataPoint>> returning: %s" % (self.strval))
+            return self.strval
 
     def test_AddDataPointSourceValid(self):
 
@@ -147,8 +153,20 @@ class TestRuleMSX(unittest.TestCase):
             
         def evaluate(self,dataSet):
             val = dataSet.dataPoints[self.dataPointName].getValue()
-            return val==self.target
+            res = val==self.target
+            print("Condition >> Evaluating: %s = %s \treturning: %s" % (val, self.target, res))
+            return res
         
+    class PrintStringAction(Action):
+        
+        def __init__(self,someString, promoteRule):
+            self.strval = someString
+            self.promoteRule = promoteRule
+            
+        def execute(self,dataSet):
+            print("Action Execute: %s" % (self.strval))
+            self.addRule(self.promoteRule)
+            
     def test_integration_TestRuleSet01(self):
         
         raised = False
@@ -161,6 +179,7 @@ class TestRuleMSX(unittest.TestCase):
             ds1.addDataPoint("DataPoint2",self.GenericStringDataPointSource("AnotherValue"))
             
             rs1 = rmsx.createRuleSet("RuleSet1")
+
             r1 = rs1.addRule("TestRule1")
             
             c1 = RuleCondition("CheckIfTarget1MatchesDataPoint", self.GenericRuleConditionEvaluator("TestValue","DataPoint1"))
@@ -169,9 +188,13 @@ class TestRuleMSX(unittest.TestCase):
             c2 = RuleCondition("CheckIfTarget2MatchesDataPoint", self.GenericRuleConditionEvaluator("AnotherValue","DataPoint2"))
             r1.addRuleCondition(c2)
  
+            a1 = rmsx.createAction("TestAction1", self.PrintStringAction("Result of TestRule1"))
+
+            r1.addAction(a1)
+            
             rs1.execute(ds1)
  
-            time.sleep(5)
+            #time.sleep(0)
             
             rs1.stop()
             
