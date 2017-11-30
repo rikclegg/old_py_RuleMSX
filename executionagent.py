@@ -5,7 +5,7 @@ Created on 28 Nov 2017
 '''
 
 import threading
-import Queue
+import queue
 from workingrule import WorkingRule
 
 class ExecutionAgent:
@@ -59,7 +59,7 @@ class ExecutionAgent:
         
         self.ruleSet = ruleSet
         
-        self.dataSetQueue = Queue.Queue()
+        self.dataSetQueue = queue.Queue()
 
         if not dataSet == None:
             self.addDataSet(dataSet)
