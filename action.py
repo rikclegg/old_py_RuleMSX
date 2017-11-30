@@ -10,7 +10,7 @@ class Action:
         self.name = name
         self.actionExecutor = executor
         
-    def execute(self,workingRule, dataSet):
+    def execute(self, dataSet):
         if not self.actionExecutor == None:
             self.actionExecutor.execute(dataSet)
             

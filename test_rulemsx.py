@@ -159,13 +159,11 @@ class TestRuleMSX(unittest.TestCase):
         
     class PrintStringAction(Action):
         
-        def __init__(self,someString, promoteRule):
+        def __init__(self,someString):
             self.strval = someString
-            self.promoteRule = promoteRule
             
         def execute(self,dataSet):
             print("Action Execute: %s" % (self.strval))
-            self.addRule(self.promoteRule)
             
     def test_integration_TestRuleSet01(self):
         
@@ -188,7 +186,8 @@ class TestRuleMSX(unittest.TestCase):
             c2 = RuleCondition("CheckIfTarget2MatchesDataPoint", self.GenericRuleConditionEvaluator("AnotherValue","DataPoint2"))
             r1.addRuleCondition(c2)
  
-            a1 = rmsx.createAction("TestAction1", self.PrintStringAction("Result of TestRule1"))
+            e1 = self.PrintStringAction("Result of TestRule1")
+            a1 = rmsx.createAction("TestAction1", e1)
 
             r1.addAction(a1)
             
