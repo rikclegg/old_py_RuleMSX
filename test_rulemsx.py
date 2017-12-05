@@ -150,6 +150,7 @@ class TestRuleMSX(unittest.TestCase):
         def __init__(self, target, dataPointName):
             self.target = target
             self.dataPointName = dataPointName
+            super().addDependentDataPointName(dataPointName)
             
         def evaluate(self,dataSet):
             val = dataSet.dataPoints[self.dataPointName].getValue()
@@ -197,7 +198,8 @@ class TestRuleMSX(unittest.TestCase):
             
             rs1.stop()
             
-        except:
+        except BaseException  as e:
+            print("error: " +str(e))
             raised = True
 
         self.assertFalse(raised)
