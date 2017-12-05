@@ -150,6 +150,7 @@ class TestRuleMSX(unittest.TestCase):
         def __init__(self, target, dataPointName):
             self.target = target
             self.dataPointName = dataPointName
+            super().__init__()
             super().addDependentDataPointName(dataPointName)
             
         def evaluate(self,dataSet):
