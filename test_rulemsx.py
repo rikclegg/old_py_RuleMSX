@@ -127,10 +127,14 @@ class TestRuleMSX(unittest.TestCase):
             
         def __init__(self, val=None):
             self.strval = val
-            
+
         def getValue(self):
             print("DataPoint>> returning: %s" % (self.strval))
             return self.strval
+        
+        def setValue(self, val):
+            self.strval = val
+            super().setStale()
 
     def test_AddDataPointSourceValid(self):
 
@@ -150,7 +154,6 @@ class TestRuleMSX(unittest.TestCase):
         def __init__(self, target, dataPointName):
             self.target = target
             self.dataPointName = dataPointName
-            super().__init__()
             super().addDependentDataPointName(dataPointName)
             
         def evaluate(self,dataSet):
@@ -161,10 +164,11 @@ class TestRuleMSX(unittest.TestCase):
         
     class PrintStringAction(Action):
         
-        def __init__(self,someString):
+        def __init__(self,someString, modDataPointName):
             self.strval = someString
-            
+            self.modDataPointName = modDataPointName
         def execute(self,dataSet):
+            dataSet.dataPoints[self.modDataPointName].dataPointSource.setValue("XtestvalueX")
             print("Action Execute: %s" % (self.strval))
             
     def test_integration_TestRuleSet01(self):
@@ -188,7 +192,7 @@ class TestRuleMSX(unittest.TestCase):
             c2 = RuleCondition("CheckIfTarget2MatchesDataPoint", self.GenericRuleConditionEvaluator("AnotherValue","DataPoint2"))
             r1.addRuleCondition(c2)
  
-            e1 = self.PrintStringAction("Result of TestRule1")
+            e1 = self.PrintStringAction("Result of TestRule1", "DataPoint1")
             a1 = rmsx.createAction("TestAction1", e1)
 
             r1.addAction(a1)

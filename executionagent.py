@@ -57,11 +57,15 @@ class ExecutionAgent:
                 
             #for k,r in self.execAgent.ruleSet.rules.items():
             for r in self.execAgent.ruleSet.rules.values():
-                wr = WorkingRule(r,dataSet)
+                wr = WorkingRule(r,dataSet, self)
                 self.workingSet.append(wr)
-                self.openSetQueue.append(wr)
+                self.enqueueWorkingRule(wr)
             
     
+        def enqueueWorkingRule(self,wr):
+            # think about ancestry and descendant rules...
+            self.openSetQueue.append(wr)
+
     def __init__(self,ruleSet, dataSet=None):
         
         self.ruleSet = ruleSet
@@ -86,4 +90,5 @@ class ExecutionAgent:
     def addDataSet(self,dataSet):
         
         self.dataSetQueue.put(dataSet)
+        
         
