@@ -26,7 +26,7 @@ class ExecutionAgent:
             iterationCount = 0
             while(self.running):
                 
-                print("WorkingSet iteration %d" % (iterationCount))
+                #print("WorkingSet iteration %d" % (iterationCount))
                 iterationCount=iterationCount+1
                 
                 with self.lock:
