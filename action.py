@@ -5,7 +5,7 @@ Created on 27 Nov 2017
 '''
 class Action:
     
-    def __init__(self,name, executor=None):
+    def __init__(self, name, executor=None):
         
         self.name = name
         self.actionExecutor = executor
@@ -14,11 +14,6 @@ class Action:
         if not self.actionExecutor == None:
             self.actionExecutor.execute(dataSet)
             
-    def addRule(self, ruleName):
-        raise NotImplementedError()
-    
-    def removeRule(self, ruleName):
-        raise NotImplementedError()
 
         
     

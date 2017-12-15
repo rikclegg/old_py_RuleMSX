@@ -167,6 +167,7 @@ class TestRuleMSX(unittest.TestCase):
         def __init__(self,someString, modDataPointName):
             self.strval = someString
             self.modDataPointName = modDataPointName
+            
         def execute(self,dataSet):
             dataSet.dataPoints[self.modDataPointName].dataPointSource.setValue("XtestvalueX")
             print("Action Execute: %s" % (self.strval))
