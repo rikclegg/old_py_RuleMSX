@@ -1,7 +1,7 @@
 '''
 Created on 25 Nov 2017
 
-@author: Rik Clegg
+@author: RCLEGG2@BLOOMBERG.NET
 '''
 import unittest
 import rulemsx

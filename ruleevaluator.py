@@ -1,8 +1,10 @@
 '''
 Created on 28 Nov 2017
 
-@author: metz
+@author: RCLEGG2@BLOOMBERG.NET
 '''
+
+import logging
 
 class RuleEvaluator:
     
@@ -13,6 +15,12 @@ class RuleEvaluator:
         self.condition = condition
         
     def addDependentDataPointName(self,dataPointName):
+        
+        try:
+            logging.info("Add dependent DataPoint name: " + dataPointName + " for RuleCondition: " + self.condition.name)
+        except:
+            logging.info("Add dependent DataPoint name: " + dataPointName + " for RuleCondition: unknown")
+            
         try:
             self.dependentDataPointNames.append(dataPointName)
         except:
