@@ -63,8 +63,9 @@ class ExecutionAgent:
             
     
         def enqueueWorkingRule(self,wr):
-            # think about ancestry and descendant rules...
-            self.openSetQueue.append(wr)
+            # think about ancestry and descendant rules...only insert if not already in the queue
+            if wr not in self.openSetQueue:
+                self.openSetQueue.append(wr)
 
     def __init__(self,ruleSet, dataSet=None):
         
